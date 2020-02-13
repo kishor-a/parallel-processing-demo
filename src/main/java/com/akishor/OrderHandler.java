@@ -1,8 +1,11 @@
 package com.akishor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 public class OrderHandler {
 
@@ -36,18 +39,22 @@ public class OrderHandler {
         return order;
     }
 
-    public void handleOrder(){
+    public void handleOrder() throws ExecutionException, InterruptedException {
 
+        List<CompletableFuture> completableFutureList = new ArrayList<>();
         for(int i = 0; i < 100; i++) {
             CompletableFuture futureOrder = CompletableFuture.supplyAsync(this::placeAnOrder)
                     .thenApply(this::makePayment)
                     .thenApply(this::dispatch)
                     .thenApply(this::sendMail);
+            completableFutureList.add(futureOrder);
         }
+
+
     }
 
     public static void main(String[] args) {
         OrderHandler orderHandler=new OrderHandler();
-        orderHandler.handleOrder();
+
     }
 }
