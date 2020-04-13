@@ -7,10 +7,14 @@ import static java.lang.System.out;
 public class SimpleExecutor {
 
     private void start(){
+
         ExecutorService executor = Executors.newFixedThreadPool(4);
+
+        // 1. Runnable lambda
         executor.submit( () ->
                 out.println("This is from runnable, will run in future") );
 
+        // 2. Callable lambda
         Future<String> helloSayingTask = sayHelloInFuture(executor);
 
         try {
